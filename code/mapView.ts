@@ -41,6 +41,10 @@ class mapView extends gridRenderer{
       this.resources = resources;
   }
 	
+	public getCanvas(){
+		return this.canvas;
+	}
+
   public createView(){
     //this.cancel();
 		
@@ -150,13 +154,13 @@ class mapView extends gridRenderer{
 			this.createListButton(buttonList, "Set Pathfinding Destination", null, () => this.setPathfindingDestination());
 		}
 
-    this.mouseOnCanvas = false;
-    this.canvas.onmousemove = (event) => this.mouseMoved(event);
-    this.canvas.onmouseenter = (event) => {this.mouseOnCanvas = true;}
-    this.canvas.onmouseleave = (event) => {this.mouseOnCanvas = false; this.mouseDown = false;}
-    this.canvas.onmousedown = (event) => {this.mouseDown = true;}
-    this.canvas.onmouseup = (event) => {this.mouseDown = false;}
-    this.canvas.onclick = () => this.canvasClick();
+    // this.mouseOnCanvas = false;
+    // this.canvas.onmousemove = (event) => this.mouseMoved(event);
+    // this.canvas.onmouseenter = (event) => {this.mouseOnCanvas = true;}
+    // this.canvas.onmouseleave = (event) => {this.mouseOnCanvas = false; this.mouseDown = false;}
+    // this.canvas.onmousedown = (event) => {this.mouseDown = true;}
+    // this.canvas.onmouseup = (event) => {this.mouseDown = false;}
+    // this.canvas.onclick = () => this.canvasClick();
   }
 	
 	private setCostLabel(building : building){
@@ -242,15 +246,11 @@ class mapView extends gridRenderer{
 		buttonList.appendChild(buttonLi);
 	}
 
-  public mouseMoved(evt){
-      var rect = this.canvas.getBoundingClientRect();
-      this.mouseX = Math.round((evt.clientX-rect.left)/(rect.right-rect.left)*this.canvas.width);
-      this.mouseY = Math.round((evt.clientY-rect.top)/(rect.bottom-rect.top)*this.canvas.height);
+  public mouseMoved(mouseX, mouseY, mouseDown){
+      var gridSquareX = Math.floor(mouseX / this.tileWidth);
+      var gridSquareY = Math.floor(mouseY / this.fontSize);
 
-      var gridSquareX = Math.floor(this.mouseX / this.tileWidth);
-      var gridSquareY = Math.floor(this.mouseY / this.fontSize);
-
-      if(this.mouseDown){
+      if(mouseDown){
         if(this.roading){
           this.buildRoad(gridSquareX, gridSquareY);
         }

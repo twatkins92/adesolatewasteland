@@ -6,11 +6,16 @@
 /// <reference path="./endView.ts"/>
 /// <reference path="./loadingView.ts"/>
 /// <reference path="./global.d.ts"/>
+/// <reference path="./mouseController.ts"/>
+/// <reference path="./touchController.ts"/>
 
 class Game{
 
   private mapRenderer : mapView = null;
-  private map : map;
+	private map : map;
+	
+	private mouseController : mouseController;
+	private touchController : touchController;
 
   private resources : resources = null;
   private resourceView : resourceView = null;
@@ -35,8 +40,8 @@ class Game{
 		disableConcentrate = false;
 		disabledConcentrateAlready = false;
 		
-		satanMode = false;
-		fastMode = false;
+		satanMode = true;
+		fastMode = true;
 		if(satanMode){
 			alert('Satan Mode Activated!');
 			
@@ -54,6 +59,14 @@ class Game{
 		
     this.resourceView = new resourceView(document.body, this.resources);
     this.mapRenderer = new mapView(document.body, "DejaVuSansMono", 18, -4, 11, this.map, this.resources);
+
+		var touchDevice = (navigator.maxTouchPoints || 'ontouchstart' in document.documentElement);
+		if (touchDevice) {
+			this.touchController = new touchController(this.mapRenderer);
+		}
+		else {
+			this.mouseController = new mouseController(this.mapRenderer);
+		}
 
     this.statusView = new story(document.body, this.resources, this.mapRenderer);
 		
